@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Archus Task Manager</title>
+</head>
+<body>
+    <h1>Archus Task Manager</h1>
+    <form id="taskForm">
+        <input type="text" id="taskName" placeholder="Task Name">
+        <button type="submit">Add Task</button>
+    </form>
+    <ul id="taskList"></ul>
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var taskName = document.getElementById('taskName').value;
+            fetch('/add_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: taskName }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                var taskList = document.getElementById('taskList');
+                taskList.innerHTML = '';
+                data.tasks.forEach(task => {
+                    var li = document.createElement('li');
+                    li.textContent = task.name;
+                    taskList.appendChild(li);
+                });
+            });
+        });
+    </script>
+</body>
+</html
